@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive World Map</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .map-container {
+            position: relative;
+            width: 70%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .map-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .map-point {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .map-point:hover {
+            transform: scale(1.1);
+        }
+
+        .info-panel {
+            width: 30%;
+            padding: 20px;
+            background-color: #2a2a2a;
+            background-image: url(./wallhaven-n6qrjw.jpg);
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .info-card {
+            display: none;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s;
+        }
+
+        .info-card.active {
+            display: block;
+        }
+
+        .info-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .info-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .info-text {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Market point styles */
+        #point1 {
+            background-color: #10B981;
+            top: 32%;
+            left: 21%;
+        }
+
+        #point2 {
+            background-color: #8B5CF6;
+            top: 68%;
+            left: 25%;
+        }
+
+        #point3 {
+            background-color: #F59E0B;
+            top: 53%;
+            left: 33%;
+        }
+
+        #point4 {
+            background-color: #EF4444;
+            top: 47%;
+            left: 57%;
+        }
+
+        #point5 {
+            background-color: #3B82F6;
+            top: 31%;
+            left: 69%;
+        }
+
+        #point6 {
+            background-color: #475569;
+            top: 70%;
+            left: 78%;
+        }
+
+        /* Info card styles matching point colors */
+        #info1 {
+            background-color: rgba(16, 185, 129, 0.2);
+            border: 2px solid #10B981;
+        }
+
+        #info2 {
+            background-color: rgba(139, 92, 246, 0.2);
+            border: 2px solid #8B5CF6;
+        }
+
+        #info3 {
+            background-color: rgba(245, 158, 11, 0.2);
+            border: 2px solid #F59E0B;
+        }
+
+        #info4 {
+            background-color: rgba(239, 68, 68, 0.2);
+            border: 2px solid #EF4444;
+        }
+
+        #info5 {
+            background-color: rgba(59, 130, 246, 0.2);
+            border: 2px solid #3B82F6;
+        }
+
+        #info6 {
+            background-color: rgba(71, 85, 105, 0.2);
+            border: 2px solid #475569;
+        }
+
+        /* Default selected point */
+        .highlight-point {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="map-container">
+            <img src="/10200863.jpg" alt="World Map" class="map-image">
+
+            <!-- Map Points -->
+            <div style="font-size: 10px;" class="map-point" id="point1" onclick="showInfo('info1', 'point1')">Apa Itu AI
+                ?
+            </div>
+            <div style="font-size: 10px;" class="map-point" id="point2" onclick="showInfo('info2', 'point2')">Database
+                <br>
+                Vektor
+            </div>
+            <div style="font-size: 10px;" class="map-point" id="point3" onclick="showInfo('info3', 'point3')">Model AI
+            </div>
+            <div style="font-size: 8px;" class="map-point" id="point4" onclick="showInfo('info4', 'point4')">Komponen
+                Ai
+            </div>
+            <div style="font-size: 10px; width: 100px; height: 100px;" class="map-point" id="point5"
+                onclick="showInfo('info5', 'point5')">Algoritma
+                <br>
+                Machine Learning
+            </div>
+            <div style="font-size: 10px;" class="map-point" id="point6" onclick="showInfo('info6', 'point6')">Aplikasi
+                Ai
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <!-- Info Cards -->
+            <div class="info-card" id="info1">
+                <div class="info-header">
+                    <div class="info-icon" style="background-color: #10B981;"></div>
+                    <div class="info-title">🧠 APA ITU KECERDASAN BUATAN?</div>
+                </div>
+                <p class="info-text">• Kecerdasan Buatan (Artificial Intelligence/AI) adalah cabang ilmu komputer yang
+                    bertujuan membuat mesin dapat "berpikir" dan "belajar" seperti manusia.</p>
+
+                <br>
+                <p class="info-text">• AI memungkinkan komputer untuk:</p>
+                <p class="info-text">
+                    o Memahami bahasa manusia
+                    <br>
+                    o Mengenali gambar dan suara
+                    <br>
+                    o Membuat prediksi berdasarkan data
+                    <br>
+                    o Memecahkan masalah kompleks
+
+                </p>
+            </div>
+
+            <div class="info-card" id="info2">
+                <div class="info-header">
+                    <div class="info-icon" style="background-color: #8B5CF6;"></div>
+                    <div class="info-title">🌐 Konsep Database Vektor</div>
+                </div>
+                <p class="info-text">
+                    • Database vektor = cara menyimpan informasi dalam bentuk angka (vektor)
+                    <br>
+                    • Setiap kata, gambar, atau konsep diubah menjadi deret angka
+                    <br>
+                    • Contoh: kata "sekolah" → [0.2, 0.7, -0.5, 0.1, ...]
+                    <br>
+                    • Memungkinkan komputer mencari kesamaan makna, bukan hanya kesamaan teks
+                    <br>
+                    • Mirip dengan cara otak manusia mengaitkan konsep berdasarkan kemiripan
+
+                </p>
+
+            </div>
+
+            <div class="info-card" id="info3">
+                <div class="info-header">
+                    <div class="info-icon" style="background-color: #F59E0B;"></div>
+                    <div class="info-title">🧮 CARA KERJA MODEL AI</div>
+                </div>
+                <p class="info-text">• AI belajar dari data, mirip manusia belajar dari pengalaman</p>
+                <br>
+                <p class="info-text">• Tahapan kerja model AI: </p>
+                <p class="info-text">
+                    1. Pelatihan (training): belajar dari data contoh
+                    <br>
+                    2. Pemahaman pola: menemukan hubungan dalam data
+                    <br>
+                    3. Prediksi: membuat keputusan berdasarkan apa yang dipelajari
+                    <br>
+                    4. Perbaikan: menyesuaikan prediksi berdasarkan feedback
+
+                </p>
+            </div>
+
+            <div class="info-card" id="info4">
+                <div class="info-header">
+                    <div class="info-icon" style="background-color: #EF4444;"></div>
+                    <div class="info-title">🔧 KOMPONEN UTAMA SISTEM AI</div>
+                </div>
+                <p class="info-text">
+                    • Data: "makanan" untuk AI, semakin banyak semakin baik
+                    <br>
+                    • Algoritma: "resep" atau aturan pemrosesan data
+                    <br>
+                    • Model: "otak" AI yang telah dilatih
+                    <br>
+                    • Infrastruktur: perangkat keras komputer yang menjalankan model
+                    <br>
+                    • Antarmuka: cara manusia berkomunikasi dengan AI
+
+                </p>
+
+            </div>
+
+            <div class="info-card" id="info5">
+                <div class="info-header">
+                    <div class="info-icon" style="background-color: #3B82F6;"></div>
+                    <div class="info-title">🧪 ALGORITMA PEMBELAJARAN MESIN</div>
+                </div>
+                <p class="info-text">
+                    • Supervised Learning: belajar dengan "guru" (data berlabel)
+                    <br>
+                    • Unsupervised Learning: belajar mandiri menemukan pola
+                    <br>
+                    • Reinforcement Learning: belajar dengan sistem hadiah/hukuman
+                    <br>
+                    • Deep Learning: meniru cara kerja otak dengan jaringan saraf tiruan
+                    <br>
+                    • Natural Language Processing: memahami dan menghasilkan bahasa manusia
+
+                </p>
+            </div>
+
+            <div class="info-card" id="info6">
+                <div class="info-header">
+                    <div class="info-icon" style="background-color: #475569;"></div>
+                    <div class="info-title">🚀 CONTOH APLIKASI AI SEHARI-HARI</div>
+                </div>
+                <p class="info-text">
+                    • Asisten virtual (Siri, Google Assistant)
+                    <br>
+                    • Rekomendasi film dan musik (Netflix, Spotify)
+                    <br>
+                    • Penerjemah bahasa (Google Translate)
+                    <br>
+                    • Filter foto di media sosial
+                    <br>
+                    • Sistem navigasi dan peta
+
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show the default info card when page loads
+        window.onload = function () {
+            showInfo('info1', 'point1');
+        };
+
+        function showInfo(infoId, pointId) {
+            // Hide all info cards
+            const infoCards = document.querySelectorAll('.info-card');
+            infoCards.forEach(card => {
+                card.classList.remove('active');
+            });
+
+            // Show selected info card
+            document.getElementById(infoId).classList.add('active');
+
+            // Remove highlight from all points
+            const points = document.querySelectorAll('.map-point');
+            points.forEach(point => {
+                point.classList.remove('highlight-point');
+            });
+
+            // Add highlight to selected point
+            document.getElementById(pointId).classList.add('highlight-point');
+        }
+    </script>
+</body>
+
+</html>
